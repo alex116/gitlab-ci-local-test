@@ -1,0 +1,17 @@
+image: docker:latest
+
+stages:
+  - build
+
+build_test_image:
+  stage: build
+  services:
+    - docker:20.10.16-dind
+  script:
+    - docker build -f Dockerfile -t myimage:latest .
+    - |
+      if [ $GITLAB_CI = 'true' ] ; then
+        docker push myimage:latest
+      else
+        echo "created myimage:latest"
+      fi
